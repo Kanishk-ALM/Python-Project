@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - demo3
 
 jobs:
   update-pr-template:
@@ -25,15 +26,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit changes
-        run: |
-          git add .
-          git -c user.name='GitHub Actions' -c user.email='actions@github.com' commit -m "$COMMIT_MESSAGE"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+     
