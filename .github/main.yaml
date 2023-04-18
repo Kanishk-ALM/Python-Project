@@ -1,11 +1,9 @@
 name: Update PR Template
 
 on:
-  push:
-    branches:
-      - master
-      - demo3
-
+  pull_request:
+    types: [opened]
+    
 jobs:
   update-pr-template:
     runs-on: ubuntu-latest
