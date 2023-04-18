@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - demo3
 
 jobs:
   update-pr-template:
