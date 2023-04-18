@@ -1,3 +1,1 @@
-Description
------------------------------------------------
-${{ env.DESCRIPTION_PLACEHOLDER }}
+Description : This is test PR file
