@@ -1,3 +1,3 @@
 Description
 -----------------------------------------------
-{{description}}
+{{DESCRIPTION_PLACEHOLDER}}
