@@ -21,7 +21,7 @@ jobs:
 
       - name: Update PR Template
         run: |
-          sed -i "s/DESCRIPTION_PLACEHOLDER/$PR_DESCRIPTION/g" .github/PULL_REQUEST_TEMPLATE.md
+          sed -i "s/DESCRIPTION_PLACEHOLDER/$PR_DESCRIPTION/g" .github/pull_request_template.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
