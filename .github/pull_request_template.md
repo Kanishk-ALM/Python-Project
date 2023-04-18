@@ -1,3 +1,3 @@
 Description
 -----------------------------------------------
-{{env.DESCRIPTION_PLACEHOLDER}}
+${{ env.DESCRIPTION_PLACEHOLDER }}
