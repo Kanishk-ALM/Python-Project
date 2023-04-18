@@ -1,3 +1,1 @@
-Description
------------------------------------------------
-${{ env.DESCRIPTION_PLACEHOLDER }}
+Description : this is the test PR template
