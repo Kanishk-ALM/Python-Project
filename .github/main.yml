@@ -22,7 +22,7 @@ jobs:
           github-token: ${{ secrets.TOKEN_GITHUB }}
           script: |
             const fs = require('fs');
-            const content = fs.readFileSync('PULL_REQUEST_TEMPLATE.md', 'utf8');
+            const content = fs.readFileSync('pull_request_template.md', 'utf8');
             const newContent = content.replace(/## Description.*?(?=##|\n\n)/s, '## Description\n\nThis is a dynamically updated description!');
-            fs.writeFileSync('PULL_REQUEST_TEMPLATE.md', newContent);
+            fs.writeFileSync('pull_request_template.md', newContent);
             console.log('Updated PR Template Description.');
