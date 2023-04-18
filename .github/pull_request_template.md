@@ -1,3 +1,3 @@
 Description
 -----------------------------------------------
-Test PR template
+{{description}}
