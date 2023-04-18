@@ -1,0 +1,185 @@
+# Copyright 2019 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+#
+# Licensed under the Amazon Software License (the 'License').
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#   http://aws.amazon.com/asl/
+#
+# or in the 'license' file accompanying this file. This file is distributed
+# on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Pipeline Template"
+
+Parameters:
+
+  RepositoryName:
+    Type:  String
+    Default: "Aarti-AllEventsRepo"
+  BranchName:
+    Type:  String
+    Default: "main"
+  Setup:
+    Type: String
+    Default: false
+
+
+Conditions: 
+  BranchMain: !Equals [ !Ref BranchName, "main" ]
+  BranchDevelop: !Equals [ !Ref BranchName, "develop"]
+  Setup: !Equals [ !Ref Setup, true ]
+
+Resources:
+
+#----------------------------------------------------------------------#
+# Resource CodePipeline
+#----------------------------------------------------------------------#
+  CodeDeployApplication1:
+    Type: AWS::CodeDeploy::Application
+    
+  CodeDeployGroup1:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication1
+      DeploymentGroupName: CodeDeployGroupQA
+      Ec2TagFilters:
+        - Key: 'Name'
+          Value: 'AartiCodeDeployUbuntuServer'
+          Type: KEY_AND_VALUE
+      ServiceRoleArn: 'arn:aws:iam::543816070942:role/AartiCodeDeploy'
+      
+  CodeDeployApplication2:
+    Type: AWS::CodeDeploy::Application
+    
+  CodeDeployGroup2:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication2
+      DeploymentGroupName: CodeDeployGroupUAT
+      Ec2TagFilters:
+        - Key: 'Name'
+          Value: 'AartiCodeDeployServer2'
+          Type: KEY_AND_VALUE
+      ServiceRoleArn: 'arn:aws:iam::543816070942:role/AartiCodeDeploy'
+ 
+ 
+  Pipeline:
+    Type: "AWS::CodePipeline::Pipeline"
+    Properties:
+      Name: "Aarti-New-alEvents"
+      RoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/CodePipelineRole'
+      ArtifactStore:
+        Type: S3
+        Location: !Sub '${AWS::AccountId}-templates'
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: App
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: "1"
+                Provider: CodeCommit
+              Configuration:
+                RepositoryName: !Ref RepositoryName
+                BranchName: !Ref BranchName
+                #PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: Source_folder_Aarti_New_alEvents_AllEvents
+              RunOrder: 1
+              
+        - Name: ArtifactCreation
+          Actions:
+            - Name: Artifact
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Version: "1"
+                Provider: Lambda
+              Configuration:
+                FunctionName: "aarti-allEvents-sourceLambda"
+              OutputArtifacts:
+                - Name: SourceLambda
+              InputArtifacts:
+                - Name: Source_folder_Aarti_New_alEvents_AllEvents
+              RunOrder: 1        
+
+
+
+#----------------------------------------------------------------------#
+# Regardless of branch type, the CI Stage will always be created.
+#----------------------------------------------------------------------#
+        - Name: ContinuousIntegration
+          Actions:
+            - Name: BuildSourceCode
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: "1"
+                Provider: CodeBuild
+              OutputArtifacts:
+                - Name: BuildArtifact
+              InputArtifacts:
+                - Name: SourceLambda 
+              Configuration:
+                ProjectName: Aarti-PythonSampleProject
+              RunOrder: 1
+              
+        - Name: ApprovalForQADeploy
+          Actions:
+            - Name: QADeployApproval
+              ActionTypeId:
+                Category: Approval
+                Owner: AWS
+                Version: "1"
+                Provider: Manual
+              OutputArtifacts: []
+              InputArtifacts: []
+              RunOrder: 1
+              
+        - Name: QADeploy
+          Actions:
+            - Name: QADeployment
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CodeDeploy
+              Configuration:
+                ApplicationName: !Ref CodeDeployApplication1
+                DeploymentGroupName: !Ref CodeDeployGroup1
+              InputArtifacts:
+                - Name: SourceLambda
+              RunOrder: 1
+              
+        - Name: ApprovalForUATDeploy
+          Actions:
+            - Name: UATDeployApproval
+              ActionTypeId:
+                Category: Approval
+                Owner: AWS
+                Version: "1"
+                Provider: Manual
+              OutputArtifacts: []
+              InputArtifacts: []
+              RunOrder: 1
+              
+        - Name: UATDeploy
+          Actions:
+            - Name: UATDeployment
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CodeDeploy
+              Configuration:
+                ApplicationName: !Ref CodeDeployApplication2
+                DeploymentGroupName: !Ref CodeDeployGroup2
+              InputArtifacts:
+                - Name: SourceLambda
+              RunOrder: 1
+
