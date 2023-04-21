@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout private repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           repository: ALMCybage/Python-Project-Demo
           token: ${{ secrets.WF_TOKEN }}
