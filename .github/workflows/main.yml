@@ -9,10 +9,7 @@ jobs:
     steps:
       - name: Checkout private repo
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.WF_TOKEN }}
-
-
+        
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
