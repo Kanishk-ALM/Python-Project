@@ -7,8 +7,12 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout private repo
+        uses: actions/checkout@v2
+        with:
+          repository: myorg/myprivate-repo
+          token: ${{ secrets.WF_TOKEN }}
+
 
       - name: Set up Python
         uses: actions/setup-python@v3
