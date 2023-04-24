@@ -23,4 +23,4 @@ jobs:
       - name: Deploy to AQ
         run: |
           # Run deployment script to AQ environment
-          ls -la
+          python ops.py
