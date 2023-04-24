@@ -23,4 +23,6 @@ jobs:
       - name: Deploy to AQ
         run: |
           # Run deployment script to AQ environment
-          python ops.py
+          sudo apt install python3
+          python3 --version
+          python3 ops.py
