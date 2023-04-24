@@ -15,4 +15,12 @@ jobs:
         with:
           python-version: 3.9
 
-#
+  deploy-aq:
+    runs-on: ubuntu-latest
+  #  needs: build-test
+    if: ${{ github.ref == 'refs/heads/master' }}
+    steps:
+      - name: Deploy to AQ
+        run: |
+          # Run deployment script to AQ environment
+          cat ops.py
