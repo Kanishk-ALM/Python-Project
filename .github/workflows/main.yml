@@ -1,19 +1,30 @@
 on:
   push:
     branches:
-      - 'release/**'
+      - '*'
       
 jobs:
   notify-slack:
     runs-on: ubuntu-latest
    # needs: build-test
-  #  if: ${{ always() }}
     steps:
-      - name: Send Slack notification
+      - name: Send Slack notification on release branch
+        if: startsWith(github.ref, 'refs/heads/release/')
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Hello Workflow ${{ github.workflow }} has ${{ job.status }}."}' \
+          --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }}."}' \
           $SLACK_WEBHOOK_URL
+          
+      - name: Send Slack notification on feature branch
+        if: startsWith(github.ref, 'refs/heads/feature/')
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CHANNEL2 }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text": "Hello Workflow for feature branch: ${{ github.workflow }} has ${{ job.status }}."}' \
+          $SLACK_WEBHOOK_URL
+          
+   
 
