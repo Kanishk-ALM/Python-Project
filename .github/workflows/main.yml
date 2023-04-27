@@ -9,11 +9,11 @@ jobs:
    # needs: build-test
   #  if: ${{ always() }}
     steps:
-      - name: Notify Slack on success
-       # if: success()
+      - name: Send Slack notification
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-              --data '{"text": "Python app build and test succeeded!"}' \
-              $SLACK_WEBHOOK_URL
+          --data '{"text": "Workflow ${{ github.workflow }} has ${{ job.status }}."}' \
+          $SLACK_WEBHOOK_URL
+
