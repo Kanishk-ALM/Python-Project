@@ -17,7 +17,7 @@ jobs:
 
   deploy-aq:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/master' }}
+    #if: ${{ github.ref == 'refs/heads/master' }}
     steps:
       - name: Checkout private repo
         uses: actions/checkout@v2
