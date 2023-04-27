@@ -1,34 +1,19 @@
-
-name: Python App CI/CD
-
-on: [push]
-
+on:
+  push:
+    branches:
+      - 'release/*'
+      
 jobs:
-#   build-test:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout private repo
-#         uses: actions/checkout@v2
-        
-#       - name: Set up Python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: 3.9
-
-  deploy-aq:
+  notify-slack:
     runs-on: ubuntu-latest
-  #  if: ${{ github.ref == 'refs/heads/master' }}
+   # needs: build-test
+  #  if: ${{ always() }}
     steps:
-      - name: Checkout private repo
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.9        
-        
-      - name: Deploy to AQ
+      - name: Notify Slack on success
+       # if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          # Run deployment script to AQ environment
-          python3 --version
-          python3 ops.py
+          curl -X POST -H 'Content-type: application/json' \
+              --data '{"text": "Python app build and test succeeded!"}' \
+              $SLACK_WEBHOOK_URL
