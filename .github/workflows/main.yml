@@ -14,6 +14,6 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Workflow ${{ github.workflow }} has ${{ job.status }}."}' \
+          --data '{"text": "Hello Workflow ${{ github.workflow }} has ${{ job.status }}."}' \
           $SLACK_WEBHOOK_URL
 
