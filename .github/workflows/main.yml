@@ -18,7 +18,7 @@ jobs:
           $SLACK_WEBHOOK_URL
           
       - name: Send Slack notification on feature branch
-        if: startsWith(github.ref, 'feature')
+        if: contains(github.ref, 'feature')
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CHANNEL2 }}
         run: |
