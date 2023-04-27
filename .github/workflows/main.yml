@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "release-new"
+      - 'release/**'
       
 jobs:
   notify-slack:
@@ -15,5 +15,5 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-              --data '{"text": "Python app build and test succeeded!"}' \
+              --data '{"text": "Python app build and test succeeded from release branch"}' \
               $SLACK_WEBHOOK_URL
