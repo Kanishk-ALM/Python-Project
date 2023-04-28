@@ -17,10 +17,10 @@ jobs:
          # channel: "#your-slack-channel"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }}."}' \
-          $SLACK_WEBHOOK_URL
+#         run: |
+#           curl -X POST -H 'Content-type: application/json' \
+#           --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }}."}' \
+#           $SLACK_WEBHOOK_URL
           
       - name: Send Slack notification on feature branch
         if: startsWith(github.ref, 'refs/heads/feature/')
