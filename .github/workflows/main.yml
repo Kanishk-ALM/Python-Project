@@ -15,7 +15,7 @@ jobs:
 #           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB}}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": " Workflow updates:\n  Status: ${{ job.status }} \n Triggered by: ${{ github.actor }} \n Event: ${{ github.event_name }} branch: ${{ github.ref }}  Commit: - <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}> workflow action: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>"}' \
+          --data '{"text": " Workflow updates:\n  Status: ${{ job.status }} \n Triggered by: ${{ github.actor }} \n Event: ${{ github.event_name }} \n branch: ${{ github.ref }} \n  Commit: - <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}> \n workflow action: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>"}' \
           $SLACK_WEBHOOK_URL
           
       - name: Send Slack notification on feature branch
