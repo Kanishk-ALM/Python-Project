@@ -6,7 +6,6 @@ on:
 jobs:
   notify-slack:
     runs-on: ubuntu-latest
-   # needs: build-test
     steps:
       - name: Send Slack notification on release branch
         if: contains(github.ref, 'release')
