@@ -11,9 +11,13 @@ jobs:
         if: contains(github.ref, 'release')
         uses: slackapi/slack-github-action@v1.23.0
         with:
-          status: ${{ job.status }}
-          fields: repo,message,author,commit,action,workflow,job,took
-      #    channel: "#your-slack-channel"
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              'repository.git_commits_url': 'https://api.github.com/repos/ALMCybage/Python-Project-Demo/git/commits{/sha}',
+              'repository.statuses_url': 'https://api.github.com/repos/ALMCybage/Python-Project-Demo/statuses/{sha}',
+              'sender.url': 'https://api.github.com/users/aartibh'
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 #         run: |
