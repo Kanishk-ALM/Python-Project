@@ -9,16 +9,14 @@ jobs:
     steps:
       - name: Send Slack notification on release branch
         if: contains(github.ref, 'release')
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          slack-message: "Buils status"    
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          COMMIT_ID: ${{ github.sha }}
 #           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB}}
-#         run: |
-#           curl -X POST -H 'Content-type: application/json' \
-#           --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }}."}' \
-#           $SLACK_WEBHOOK_URL
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }} and is $COMMIT_ID"}' \
+          $SLACK_WEBHOOK_URL
           
       - name: Send Slack notification on feature branch
         if: startsWith(github.ref, 'feature')
