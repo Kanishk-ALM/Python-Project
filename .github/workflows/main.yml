@@ -1,30 +1,24 @@
+name: Update Confluence page
+
 on:
   push:
     branches:
-      - '*'
-      
+      - main
+
 jobs:
-  notify-slack:
+  update-confluence:
     runs-on: ubuntu-latest
-   # needs: build-test
     steps:
-      - name: Send Slack notification on release branch
-        if: contains('refs/heads/release/', github.ref)
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Update Confluence page
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          CONFLUENCE_API_ENDPOINT: ${{ secrets.CONFLUENCE_API_ENDPOINT }}
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
         run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Hello Workflow for release branch:  ${{ github.workflow }} has ${{ job.status }}."}' \
-          $SLACK_WEBHOOK_URL
-          
-      - name: Send Slack notification on feature branch
-        if: startsWith(github.ref, 'refs/heads/feature/')
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CHANNEL2 }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Hello Workflow for feature branch: ${{ github.workflow }} has ${{ job.status }}."}' \
-          $SLACK_WEBHOOK_URL
-          
-   
+          pageId="294913" # replace with the ID of the Confluence page you want to update
+          version=$(curl -s -X GET -H "Authorization: Bearer $CONFLUENCE_TOKEN" "$CONFLUENCE_API_ENDPOINT?expand=version.number" | jq -r '.version.number')
+          table="<table><tbody><tr><th>Header 1</th><th>Header 2</th></tr><tr><td>Row 1, Column 1</td><td>Row 1, Column 2</td></tr><tr><td>Row 2, Column 1</td><td>Row 2, Column 2</td></tr></tbody></table>" # replace with the new table content
+          data="{\"id\": \"$pageId\", \"type\": \"page\", \"version\": {\"number\": $version}, \"body\": {\"storage\": {\"value\": \"$table\", \"representation\": \"storage\"}}}"
+          curl -s -X PUT -H "Authorization: Bearer $CONFLUENCE_TOKEN" -H "Content-Type: application/json" -d
 
