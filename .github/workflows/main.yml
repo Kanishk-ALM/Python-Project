@@ -1,4 +1,4 @@
-name: Update Confluence table
+name: Get Confluence data
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  update-confluence-table:
+  get-confluence-data:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,15 +14,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: npm install -g httpie jq
+        run: sudo apt-get install -y curl jq
 
-      - name: Update Confluence table
+      - name: Get Confluence data
         env:
           CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
           CONFLUENCE_API_URL: "https://demositefirst.atlassian.net/wiki/rest/api/content"
-          PAGE_ID: "294913"
         run: |
-       
-          curl --request GET --url 'https://demositefirst.atlassian.net/wiki/rest/api/content/294913' --user 'aartibh@cybage.com:$CONFLUENCE_API_TOKEN' --header 'Accept: application/json'
+          # Get the list of spaces
+          curl --fail --silent --show-error -H "Authorization: Bearer $CONFLUENCE_API_TOKEN" -X GET "$CONFLUENCE_API_URL?expand=space" | jq .
 
-        
+          # Get the content of a page
+          curl --fail --silent --show-error -H "Authorization: Bearer $CONFLUENCE_API_TOKEN" -X GET "$CONFLUENCE_API_URL/294913?expand=body.storage" | jq .
