@@ -23,6 +23,6 @@ jobs:
           PAGE_ID: "294913"
         run: |
        
-          http --check-status -a $CONFLUENCE_API_TOKEN: GET $CONFLUENCE_API_URL/$PAGE_ID?expand=body.storage | jq -r '.body.storage.value' > page-content.txt
+          curl --request GET --url 'https://demositefirst.atlassian.net/wiki/rest/api/content/294913' --user 'aartibh@cybage.com:$CONFLUENCE_API_TOKEN' --header 'Accept: application/json'
 
         
