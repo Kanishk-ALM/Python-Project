@@ -1,4 +1,4 @@
-name: Update Confluence page
+name: Update Confluence table
 
 on:
   push:
@@ -6,19 +6,32 @@ on:
       - master
 
 jobs:
-  update-confluence:
+  update-confluence-table:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Update Confluence page
-        env:
-          CONFLUENCE_API_ENDPOINT: ${{ secrets.CONFLUENCE_API_ENDPOINT }}
-          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
-        run: |
-          pageId="294913" # replace with the ID of the Confluence page you want to update
-          version=$(curl -s -X GET -H "Authorization: Bearer $CONFLUENCE_TOKEN" "$CONFLUENCE_API_ENDPOINT?expand=version.number" | jq -r '.version.number')
-          table="<table><tbody><tr><th>Header 1</th><th>Header 2</th></tr><tr><td>Row 1, Column 1</td><td>Row 1, Column 2</td></tr><tr><td>Row 2, Column 1</td><td>Row 2, Column 2</td></tr></tbody></table>" # replace with the new table content
-          data="{\"id\": \"$pageId\", \"type\": \"page\", \"version\": {\"number\": $version}, \"body\": {\"storage\": {\"value\": \"$table\", \"representation\": \"storage\"}}}"
-          curl -s -X PUT -H "Authorization: Bearer $CONFLUENCE_TOKEN" -H "Content-Type: application/json" -d
 
+      - name: Install dependencies
+        run: npm install -g httpie jq
+
+      - name: Update Confluence table
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_API_URL: "https://demositefirst.atlassian.net/wiki/rest/api/content"
+          PAGE_ID: "294913"
+         # TABLE_ID: "987654321"
+        run: |
+          # Get the current page content
+          http --check-status -a $CONFLUENCE_API_TOKEN: GET $CONFLUENCE_API_URL/$PAGE_ID?expand=body.storage | jq -r '.body.storage.value' > page-content.txt
+
+          # Update the table content
+          # Replace this with the updated table markup
+         # echo "<table><tr><th>Column 1</th><th>Column 2</th></tr><tr><td>Value 1</td><td>Value 2</td></tr></table>" > updated-table.txt
+
+          # Replace the old table with the updated table in the page content
+          #jq ".body.storage.value |= sub(\"<table.*id=\\\"$TABLE_ID\\\">.*</table>\"; \"$(cat updated-table.txt | tr -d '\n')\")" page-content.txt > updated-page-content.txt
+
+          # Update the page with the new content
+          #http --check-status -a $CONFLUENCE_API_TOKEN: PUT $CONFLUENCE_API_URL/$PAGE_ID --json < updated-page-content.txt
