@@ -22,7 +22,7 @@ jobs:
         run: |
               curl --request POST \
                 --url 'https://kanishkpadhi.atlassian.net/wiki/api/v2/pages' \
-                --user 'kaniskan@cybage.com:$CONFLUENCE_TOKEN' \
+                --user 'kaniskan@cybage.com:$CONFLUENCE_API_TOKEN' \
                 --header 'Accept: application/json' \
                 --header 'Content-Type: application/json' \
                 --data '{
