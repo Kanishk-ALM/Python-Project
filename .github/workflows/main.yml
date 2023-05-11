@@ -17,13 +17,12 @@ jobs:
         run: sudo apt-get install -y curl
 
       - name: Create Page
-#         env:
-#           CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
-#           CONFLUENCE_API_URL: "https://demositefirst.atlassian.net/wiki/rest/api/content"
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
         run: |
               curl --request POST \
                 --url 'https://kanishkpadhi.atlassian.net/wiki/api/v2/pages' \
-                --user 'kaniskan@cybage.com:ATATT3xFfGF04gW5hjxdANaNtOVvK6a_Voct_Iiov_p971SeOtNvmGND_JpeNvMOmjw3GnZuwO_D1-IYHdGF-p5WHp-7mpH7GvbTSTPF_GPPjeOGpWFYJnSZnRYD5tEIXSpiD1Rvo2jA6IxJDJwfBbC-qOJdmFAqc2cUsnVlhud4Cg7P8EMKsHg=0B460ED2' \
+                --user 'kaniskan@cybage.com:$CONFLUENCE_TOKEN' \
                 --header 'Accept: application/json' \
                 --header 'Content-Type: application/json' \
                 --data '{
