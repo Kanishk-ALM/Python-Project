@@ -1,4 +1,4 @@
-name: Create confluence page
+name: Create Confluence Page
 
 on:
   push:
