@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  get-confluence-data:
+  confluence-data:
     runs-on: ubuntu-latest
 
     steps:
