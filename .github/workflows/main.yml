@@ -27,7 +27,7 @@ jobs:
                 --header 'Content-Type: application/json' \
                 --data '{
                 "id": "524325",
-                "status": "draft",
+                "status": "current",
                 "title": "Hello!",
                 "spaceId": "33071",
                 "body": {
