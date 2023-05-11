@@ -1,4 +1,4 @@
-name: Create Confluence Page
+name: Update Confluence Page
 
 on:
   push:
@@ -20,16 +20,16 @@ jobs:
         env:
           CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_TOKEN }}
         run: |
-              curl --request POST \
-                --url 'https://kanishkpadhi.atlassian.net/wiki/api/v2/pages' \
-                --user 'kaniskan@cybage.com:$CONFLUENCE_API_TOKEN' \
+              curl --request PUT \
+                --url 'https://kanishkpadhi.atlassian.net/wiki/api/v2/pages/524325' \
+                --user 'email@example.com:<api_token>' \
                 --header 'Accept: application/json' \
                 --header 'Content-Type: application/json' \
                 --data '{
+                "id": "524325",
+                "status": "draft",
+                "title": "Hello!",
                 "spaceId": "33071",
-                "status": "current",
-                "title": "Hello World!",
-                "parentId": "33154",
                 "body": {
                   "representation": "storage",
                   "value": "<table><tr><th>Artifact Version</th><th>Date</th></tr><tr><td>'1.0.0'</td><td>'11-May-2023'</td></tr></table>"
