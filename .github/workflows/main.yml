@@ -22,7 +22,7 @@ jobs:
         run: |
               curl --request PUT \
                 --url 'https://kanishkpadhi.atlassian.net/wiki/api/v2/pages/524325' \
-                --user 'kaniskan@cybage.com:ATATT3xFfGF0bwhn0eHVaCqG5Ft_NKi8a6urQXbhJPqf4_yR_bkSU16TUaX3pPmsPGlAePrBFV-6T-3fIAidvB-Zcgr6VgFPTHbRsUgzSf_J_vKJcyBr0CVViSADB5XKZIz2Viiwrj2JZXgXGy05wyld3agVBY40gFthNGtcKX0s9o08RLQexXg=B3FC49D2' \
+                --user 'kaniskan@cybage.com:t' \
                 --header 'Accept: application/json' \
                 --header 'Content-Type: application/json' \
                 --data '{
